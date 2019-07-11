@@ -1,6 +1,6 @@
 {
   "name": "@dck/reason-react-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
@@ -10,9 +10,9 @@
   "keywords": ["ReasonML", "React", "reason-react"],
   "author": "Thomas Deconinck",
   "license": "MIT",
-  "dependencies": {
-    "react": "16.8.1",
-    "react-dom": "16.8.1",
+  "peerDependencies": {
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "reason-react": "0.7.0"
   },
   "devDependencies": {
