@@ -15,7 +15,7 @@ Then add it to your `bsconfig.json`:
 
 ```json
 {
-  "bs-dependencies": ["reason-react", "reason-reroute"]
+  "bs-dependencies": ["reason-react", "@dck/reason-react-navigation"]
 }
 ```
 
