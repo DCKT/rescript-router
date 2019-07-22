@@ -15,7 +15,7 @@ module CreateRouter = (Config: RouterConfig) => {
           ReasonReact.Router.dangerouslyGetInitialUrl() |> Config.routeFromUrl
         );
 
-      React.useEffect1(
+      React.useLayoutEffect1(
         () => {
           let watcherID =
             ReasonReact.Router.watchUrl(url =>
