@@ -5,6 +5,12 @@ module type RouterConfig = {
 };
 
 module CreateRouter = (Config: RouterConfig) => {
+  let navigate = (route: Config.route) =>
+    ReasonReact.Router.push(route->Config.routeToUrl);
+
+  let replace = (route: Config.route) =>
+    ReasonReact.Router.replace(route->Config.routeToUrl);
+
   module Container = {
     type currentRoute = Config.route;
 
@@ -30,9 +36,29 @@ module CreateRouter = (Config: RouterConfig) => {
     };
   };
 
-  let navigate = (route: Config.route) =>
-    ReasonReact.Router.push(route |> Config.routeToUrl);
-
-  let replace = (route: Config.route) =>
-    ReasonReact.Router.replace(route |> Config.routeToUrl);
+  module Link = {
+    [@react.component]
+    let make =
+        (
+          ~route: Config.route,
+          ~className: option(string)=?,
+          ~onClick: option(ReactEvent.Mouse.t => unit)=?,
+          ~children,
+        ) =>
+      <a
+        href=route->Config.routeToUrl
+        className=className->Belt.Option.getWithDefault("")
+        onClick={
+          e => {
+            e->ReactEvent.Synthetic.preventDefault;
+            switch (onClick) {
+            | None => ()
+            | Some(fn) => fn(e)
+            };
+            navigate(route);
+          }
+        }>
+        children
+      </a>;
+  };
 };
