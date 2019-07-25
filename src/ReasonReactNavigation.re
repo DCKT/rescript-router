@@ -1,6 +1,5 @@
 module type RouterConfig = {
   type route;
-  let initialRoute: route;
   let routeFromUrl: ReasonReact.Router.url => route;
   let routeToUrl: route => string;
 };
@@ -12,7 +11,10 @@ module CreateRouter = (Config: RouterConfig) => {
   let replace = (route: Config.route) =>
     ReasonReact.Router.replace(route->Config.routeToUrl);
 
-  let routerContext = React.createContext(Config.initialRoute);
+  let routerContext =
+    React.createContext(
+      ReasonReact.Router.dangerouslyGetInitialUrl() |> Config.routeFromUrl,
+    );
 
   module RouterContextProvider = {
     let makeProps = (~value: Config.route, ~children, ()) => {
