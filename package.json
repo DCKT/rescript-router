@@ -1,13 +1,20 @@
 {
   "name": "@dck/reason-react-navigation",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "npm run build"
   },
-  "keywords": ["ReasonML", "React", "reason-react"],
+  "keywords": [
+    "ReasonML",
+    "React",
+    "reason-react",
+    "reason-react-router",
+    "router",
+    "routing"
+  ],
   "author": "Thomas Deconinck",
   "license": "MIT",
   "peerDependencies": {
@@ -16,6 +23,7 @@
     "reason-react": "0.7.0"
   },
   "devDependencies": {
-    "bs-platform": "5.0.6"
+    "bs-platform": "5.0.6",
+    "reason-react": "0.7.0"
   }
 }

@@ -1,5 +1,6 @@
 module type RouterConfig = {
   type route;
+  let initialRoute: route;
   let routeFromUrl: ReasonReact.Router.url => route;
   let routeToUrl: route => string;
 };
@@ -11,9 +12,18 @@ module CreateRouter = (Config: RouterConfig) => {
   let replace = (route: Config.route) =>
     ReasonReact.Router.replace(route->Config.routeToUrl);
 
-  module Container = {
-    type currentRoute = Config.route;
+  let routerContext = React.createContext(Config.initialRoute);
 
+  module RouterContextProvider = {
+    let makeProps = (~value: Config.route, ~children, ()) => {
+      "value": value,
+      "children": children,
+    };
+
+    let make = React.Context.provider(routerContext);
+  };
+
+  module CurrentRouteProvider = {
     [@react.component]
     let make = (~children) => {
       let (currentRoute, setCurrentRoute) =
@@ -32,7 +42,9 @@ module CreateRouter = (Config: RouterConfig) => {
         [|setCurrentRoute|],
       );
 
-      children(~currentRoute);
+      <RouterContextProvider value=currentRoute>
+        children
+      </RouterContextProvider>;
     };
   };
 
@@ -42,12 +54,25 @@ module CreateRouter = (Config: RouterConfig) => {
         (
           ~route: Config.route,
           ~className: option(string)=?,
+          ~activeClassName: option(string)=?,
           ~onClick: option(ReactEvent.Mouse.t => unit)=?,
           ~children,
-        ) =>
+        ) => {
+      let currentRoute = React.useContext(routerContext);
+      let isCurrentRoute = currentRoute == route;
+
       <a
         href=route->Config.routeToUrl
-        className=className->Belt.Option.getWithDefault("")
+        className={
+          String.concat(
+            " ",
+            [
+              className->Belt.Option.getWithDefault(""),
+              isCurrentRoute ?
+                activeClassName->Belt.Option.getWithDefault("") : "",
+            ],
+          )
+        }
         onClick={
           e => {
             e->ReactEvent.Synthetic.preventDefault;
@@ -60,5 +85,6 @@ module CreateRouter = (Config: RouterConfig) => {
         }>
         children
       </a>;
+    };
   };
 };
