@@ -64,7 +64,7 @@ let make = () =>
     }}>
       "Hello DCK "->React.string
     </a>
-    <Router.Container>
+    <Router.CurrentRouteProvider>
       ...{
            (~currentRoute) =>
              <p>
@@ -80,6 +80,6 @@ let make = () =>
                }
              </p>
          }
-    </Router.Container>
+    </Router.CurrentRouteProvider>
   </div>
 ```

@@ -45,7 +45,7 @@ module CreateRouter = (Config: RouterConfig) => {
       );
 
       <RouterContextProvider value=currentRoute>
-        children
+        {children(~currentRoute)}
       </RouterContextProvider>;
     };
   };
@@ -64,27 +64,23 @@ module CreateRouter = (Config: RouterConfig) => {
       let isCurrentRoute = currentRoute == route;
 
       <a
-        href=route->Config.routeToUrl
-        className={
-          String.concat(
-            " ",
-            [
-              className->Belt.Option.getWithDefault(""),
-              isCurrentRoute ?
-                activeClassName->Belt.Option.getWithDefault("") : "",
-            ],
-          )
-        }
-        onClick={
-          e => {
-            e->ReactEvent.Synthetic.preventDefault;
-            switch (onClick) {
-            | None => ()
-            | Some(fn) => fn(e)
-            };
-            navigate(route);
-          }
-        }>
+        href={route->Config.routeToUrl}
+        className={String.concat(
+          " ",
+          [
+            className->Belt.Option.getWithDefault(""),
+            isCurrentRoute
+              ? activeClassName->Belt.Option.getWithDefault("") : "",
+          ],
+        )}
+        onClick={e => {
+          e->ReactEvent.Synthetic.preventDefault;
+          switch (onClick) {
+          | None => ()
+          | Some(fn) => fn(e)
+          };
+          navigate(route);
+        }}>
         children
       </a>;
     };
