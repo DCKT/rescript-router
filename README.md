@@ -1,7 +1,7 @@
 # Reason React Router
 
-This is project is based on the great old [https://github.com/callstackincubator/reroute](reroute) module.
-It's just using the latest API.
+This is project is based on the great old [reroute](https://github.com/callstackincubator/reroute) module.
+It's just using the latest Reason React API (hooks & context).
 
 ## Setup
 
