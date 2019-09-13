@@ -64,7 +64,7 @@ let make = () =>
     }}>
       "Hello DCK "->React.string
     </a>
-    <Router.CurrentRouteProvider>
+    <Router.Provider>
       ...{
            (~currentRoute) =>
              <p>
@@ -80,6 +80,58 @@ let make = () =>
                }
              </p>
          }
-    </Router.CurrentRouteProvider>
+    </Router.Provider>
   </div>
+```
+
+### Authentication example
+
+Quick and dirty implementation :
+
+```reason
+open ReasonReactNavigation;
+
+module Config = {
+  type route =
+    | Login
+    | Dashboard
+    | NotFound;
+
+  let routeToUrl = route =>
+    switch (route) {
+    | Login => "/login"
+    | Dashboard => "/dashboard"
+    | NotFound => "/404"
+    };
+  let routeFromUrl = (url: ReasonReact.Router.url) =>
+    switch (url.path) {
+    | ["login"] => Login
+    | ["dashboard"] => Dashboard
+    | _ => NotFound
+    };
+};
+
+module Router = CreateRouter(Config);
+
+[@react.component]
+let make = () => {
+  let (currentUser, setCurrentUser) = React.useState(() => None);
+
+  <Router.Provider>
+    {
+      (~currentRoute) =>
+        switch (currentRoute, currentUser) {
+        | (Config.Login, None) => <Login />
+        | (Config.Login, Some(_)) => <Redirect to_=Config.Dashboard />
+        | (route, Some(user)) =>
+          switch (route) {
+          | Config.Dashboard => <Dashboard user />
+          | _ => <NotFound />
+          }
+        | (Config.NotFound, _) => <NotFound />
+        | (_, None) => <Redirect to_=Login />
+        }
+    }
+  </Router.Provider>
+};
 ```

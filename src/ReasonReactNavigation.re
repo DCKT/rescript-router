@@ -25,7 +25,7 @@ module CreateRouter = (Config: RouterConfig) => {
     let make = React.Context.provider(routerContext);
   };
 
-  module CurrentRouteProvider = {
+  module Provider = {
     [@react.component]
     let make = (~children) => {
       let (currentRoute, setCurrentRoute) =
@@ -64,25 +64,48 @@ module CreateRouter = (Config: RouterConfig) => {
       let isCurrentRoute = currentRoute == route;
 
       <a
-        href={route->Config.routeToUrl}
-        className={String.concat(
-          " ",
-          [
-            className->Belt.Option.getWithDefault(""),
-            isCurrentRoute
-              ? activeClassName->Belt.Option.getWithDefault("") : "",
-          ],
-        )}
-        onClick={e => {
-          e->ReactEvent.Synthetic.preventDefault;
-          switch (onClick) {
-          | None => ()
-          | Some(fn) => fn(e)
-          };
-          navigate(route);
-        }}>
+        href=route->Config.routeToUrl
+        className={
+          String.concat(
+            " ",
+            [
+              className->Belt.Option.getWithDefault(""),
+              isCurrentRoute ?
+                activeClassName->Belt.Option.getWithDefault("") : "",
+            ],
+          )
+        }
+        onClick={
+          e => {
+            e->ReactEvent.Synthetic.preventDefault;
+            switch (onClick) {
+            | None => ()
+            | Some(fn) => fn(e)
+            };
+            navigate(route);
+          }
+        }>
         children
       </a>;
+    };
+  };
+
+  module Redirect = {
+    type behavior =
+      | Push
+      | Replace;
+
+    [@react.component]
+    let make = (~to_: Config.route, ~behavior) => {
+      React.useLayoutEffect0(() => {
+        switch (behavior) {
+        | Push => navigate(to_)
+        | Replace => replace(to_)
+        };
+        None;
+      });
+
+      React.null;
     };
   };
 };
