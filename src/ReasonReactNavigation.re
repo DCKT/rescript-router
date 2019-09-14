@@ -96,7 +96,7 @@ module CreateRouter = (Config: RouterConfig) => {
       | Replace;
 
     [@react.component]
-    let make = (~to_: Config.route, ~behavior) => {
+    let make = (~to_: Config.route, ~behavior=Replace) => {
       React.useLayoutEffect0(() => {
         switch (behavior) {
         | Push => navigate(to_)
