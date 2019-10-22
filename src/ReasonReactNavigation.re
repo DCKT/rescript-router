@@ -1,3 +1,5 @@
+open Belt;
+
 module type RouterConfig = {
   type route;
   let routeFromUrl: ReasonReact.Router.url => route;
@@ -64,27 +66,22 @@ module CreateRouter = (Config: RouterConfig) => {
       let isCurrentRoute = currentRoute == route;
 
       <a
-        href=route->Config.routeToUrl
-        className={
-          String.concat(
-            " ",
-            [
-              className->Belt.Option.getWithDefault(""),
-              isCurrentRoute ?
-                activeClassName->Belt.Option.getWithDefault("") : "",
-            ],
-          )
-        }
-        onClick={
-          e => {
-            e->ReactEvent.Synthetic.preventDefault;
-            switch (onClick) {
-            | None => ()
-            | Some(fn) => fn(e)
-            };
-            navigate(route);
-          }
-        }>
+        href={route->Config.routeToUrl}
+        className={String.concat(
+          " ",
+          [
+            className->Option.getWithDefault(""),
+            isCurrentRoute ? activeClassName->Option.getWithDefault("") : "",
+          ],
+        )}
+        onClick={e => {
+          e->ReactEvent.Synthetic.preventDefault;
+          switch (onClick) {
+          | None => ()
+          | Some(fn) => fn(e)
+          };
+          navigate(route);
+        }}>
         children
       </a>;
     };

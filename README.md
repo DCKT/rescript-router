@@ -52,14 +52,14 @@ module Router = CreateRouter(RouterConfig);
 let make = () =>
   <div>
     <a href="#" onClick={e => {
-      event->ReactEvent.Synthetic.preventDefault;
+      e->ReactEvent.Synthetic.preventDefault;
       Router.navigate(RouterConfig.Home)
     }}>
       "Home "->React.string
     </a>
 
     <a href="#" onClick={e => {
-      event->ReactEvent.Synthetic.preventDefault;
+      e->ReactEvent.Synthetic.preventDefault;
       Router.navigate(RouterConfig.Hello("dck"))
     }}>
       "Hello DCK "->React.string
@@ -135,3 +135,25 @@ let make = () => {
   </Router.Provider>
 };
 ```
+
+## Run demo
+
+Install dependencies
+
+```
+yarn
+```
+
+Run bsb watcher
+
+```
+yarn start
+```
+
+Run webpack-dev-server
+
+```
+yarn demo
+```
+
+Go to `http://localhost:8000`
