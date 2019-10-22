@@ -7,7 +7,7 @@
     "clean": "bsb -clean-world",
     "test": "npm run build",
     "demo": "webpack-dev-server",
-    "demo:production": "NODE_ENV=production webpack"
+    "demo:production": "yarn build && NODE_ENV=production webpack"
   },
   "keywords": [
     "ReasonML",
