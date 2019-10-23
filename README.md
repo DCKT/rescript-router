@@ -23,6 +23,81 @@ Then add it to your `bsconfig.json`:
 
 ## Usage
 
+### Create your configuration
+
+```reason
+open ReasonReactNavigation;
+
+module RouterConfig = {
+  type route =
+    | Home
+    | Hello(string)
+    | NotFound;
+
+  let routeFromUrl = (url: ReasonReact.Router.url) =>
+    switch (url.path) {
+    | [] => Home
+    | ["hello", name] => Hello(name)
+    | ["404"]
+    | _ => NotFound
+    };
+
+  let routeToUrl = (route: route) =>
+    switch (route) {
+    | Home => "/"
+    | Hello(name) => "/hello/" ++ name
+    | NotFound => "/404"
+    };
+};
+
+module Router = CreateRouter(RouterConfig);
+```
+
+### Add the Provider
+
+```reason
+[@react.component]
+let make = () => {
+  <Router.Provider>
+    ...{
+      (~currentRoute) =>
+        <p>
+          {
+            (
+              switch (currentRoute) {
+              | RouterConfig.Home => "This is home"
+              | RouterConfig.Hello(n) => "Hi " ++ n
+              | _ => "404 not found"
+              }
+            )
+            |> React.string
+          }
+        </p>
+    }
+  </Router.Provider>
+};
+```
+
+### Use built-in Link module
+
+Don't forget to use it inside the Provider 😉
+
+```reason
+module NavLink = {
+  [@react.component]
+  let make = (~route, ~children) => {
+    <Router.Link
+      className="rounded block px-3 py-2 bg-gray-200 mr-2 hover:bg-gray-300"
+      activeClassName="bg-blue-500 text-white hover:bg-blue-600"
+      route>
+      children
+    </Router.Link>
+  };
+}
+```
+
+### Full example
+
 ```reason
 open ReasonReactNavigation;
 
