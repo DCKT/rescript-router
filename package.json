@@ -7,7 +7,7 @@
     "clean": "bsb -clean-world",
     "test": "npm run build",
     "demo": "webpack-dev-server",
-    "demo:production": "yarn && yarn build && yarn write-netlify-redirect && NODE_ENV=production webpack",
+    "demo:production": "yarn && yarn build && NODE_ENV=production webpack && yarn write-netlify-redirect",
     "write-netlify-redirect": "echo '/*    /index.html   200' > build/_redirects"
   },
   "keywords": [
