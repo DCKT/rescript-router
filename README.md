@@ -3,6 +3,8 @@
 This is project is based on the great old [reroute](https://github.com/callstackincubator/reroute) module.
 It's just using the latest Reason React API (hooks & context).
 
+[Checkout this simple demo](https://nifty-leakey-46cc44.netlify.com)
+
 ## Setup
 
 Install the module :
