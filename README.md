@@ -1,4 +1,4 @@
-# Reason React Router
+# Reason react navigation
 
 This is project is based on the great old [reroute](https://github.com/callstackincubator/reroute) module.
 It's just using the latest Reason React API (hooks & context).
