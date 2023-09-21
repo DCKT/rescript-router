@@ -1,4 +1,4 @@
-# Reason react navigation
+# ReScript Router
 
 This is project is based on the great old [reroute](https://github.com/callstackincubator/reroute) module.
 It's just using the latest Reason React API (hooks & context).
@@ -10,14 +10,14 @@ It's just using the latest Reason React API (hooks & context).
 Install the module :
 
 ```bash
-$ yarn add @dck/reason-react-navigation
+$ yarn add @dck/rescript-router
 ```
 
 Then add it to your `bsconfig.json`:
 
 ```json
 {
-  "bs-dependencies": ["reason-react", "@dck/reason-react-navigation"]
+  "bs-dependencies": ["@rescript/react", "@dck/rescript-router"]
 }
 ```
 
@@ -25,192 +25,167 @@ Then add it to your `bsconfig.json`:
 
 ### Create your configuration
 
-```reason
-open ReasonReactNavigation;
+```rescript
+open RescriptRouter
 
 module RouterConfig = {
-  type route =
+  type t =
     | Home
+    | About
     | Hello(string)
-    | NotFound;
+    | NotFound
 
-  let routeFromUrl = (url: ReasonReact.Router.url) =>
-    switch (url.path) {
-    | [] => Home
-    | ["hello", name] => Hello(name)
-    | ["404"]
-    | _ => NotFound
-    };
+  let make = (url: RescriptReactRouter.url) =>
+    switch url.path {
+    | list{} => Home
+    | list{"about"} => About
+    | list{"hello", name} => Hello(name)
+    | list{"404"}
+    | _ =>
+      NotFound
+    }
 
-  let routeToUrl = (route: route) =>
-    switch (route) {
+  let toString = (route: t) =>
+    switch route {
     | Home => "/"
+    | About => "/about"
     | Hello(name) => "/hello/" ++ name
     | NotFound => "/404"
-    };
-};
+    }
+}
 
-module Router = CreateRouter(RouterConfig);
+module Router = CreateRouter(RouterConfig)
 ```
 
 ### Add the Provider
 
-```reason
-[@react.component]
-let make = () => {
-  <Router.Provider>
-    ...{
-      (~currentRoute) =>
-        <p>
-          {
-            (
-              switch (currentRoute) {
-              | RouterConfig.Home => "This is home"
-              | RouterConfig.Hello(n) => "Hi " ++ n
-              | _ => "404 not found"
-              }
-            )
-            |> React.string
-          }
-        </p>
-    }
-  </Router.Provider>
-};
+```rescript
+module App = {
+  @react.component
+  let make = () =>
+    <Router.Provider>
+      {(~currentRoute) => <>
+        <div className="container mx-auto p-4">
+          <h1 className="text-xl font-semibold text-center mb-4 text-blue-700">
+            {"RescriptRouter example"->React.string}
+          </h1>
+          <div className="flex flex-row items-center mb-4">
+            <CustomLink route=RouterConfig.Home> {"Home"->React.string} </CustomLink>
+            <CustomLink route=RouterConfig.About> {"About"->React.string} </CustomLink>
+            <CustomLink route={RouterConfig.Hello("dck")}>
+              {"Route with params"->React.string}
+            </CustomLink>
+          </div>
+          {switch currentRoute {
+          | RouterConfig.Home => <h1> {"Home"->React.string} </h1>
+          | RouterConfig.About => <h1> {"About"->React.string} </h1>
+          | RouterConfig.Hello(name) =>
+            <div>
+              <h1> {"Route with params"->React.string} </h1>
+              <p> {("Hi : " ++ name)->React.string} </p>
+            </div>
+          | _ => <h1> {"404 not found"->React.string} </h1>
+          }}
+        </div>
+      </>}
+    </Router.Provider>
+}
 ```
 
 ### Use built-in Link module
 
 Don't forget to use it inside the Provider 😉
 
-```reason
-module NavLink = {
-  [@react.component]
-  let make = (~route, ~children) => {
+```rescript
+module CustomLink = {
+  @react.component
+  let make = (~route: RouterConfig.t, ~children) => {
     <Router.Link
       className="rounded block px-3 py-2 bg-gray-200 mr-2 hover:bg-gray-300"
       activeClassName="bg-blue-500 text-white hover:bg-blue-600"
       route>
       children
     </Router.Link>
-  };
+  }
 }
 ```
 
 ### Full example
 
-```reason
-open ReasonReactNavigation;
+```rescript
+open RescriptRouter
 
 module RouterConfig = {
-  type route =
+  type t =
     | Home
+    | About
     | Hello(string)
-    | NotFound;
+    | NotFound
 
-  let routeFromUrl = (url: ReasonReact.Router.url) =>
-    switch (url.path) {
-    | [] => Home
-    | ["hello", name] => Hello(name)
-    | ["404"]
-    | _ => NotFound
-    };
+  let make = (url: RescriptReactRouter.url) =>
+    switch url.path {
+    | list{} => Home
+    | list{"about"} => About
+    | list{"hello", name} => Hello(name)
+    | list{"404"}
+    | _ =>
+      NotFound
+    }
 
-  let routeToUrl = (route: route) =>
-    switch (route) {
+  let toString = (route: t) =>
+    switch route {
     | Home => "/"
+    | About => "/about"
     | Hello(name) => "/hello/" ++ name
     | NotFound => "/404"
-    };
-};
-
-module Router = CreateRouter(RouterConfig);
-
-[@react.component]
-let make = () =>
-  <div>
-    <a href="#" onClick={e => {
-      e->ReactEvent.Synthetic.preventDefault;
-      Router.navigate(RouterConfig.Home)
-    }}>
-      "Home "->React.string
-    </a>
-
-    <a href="#" onClick={e => {
-      e->ReactEvent.Synthetic.preventDefault;
-      Router.navigate(RouterConfig.Hello("dck"))
-    }}>
-      "Hello DCK "->React.string
-    </a>
-    <Router.Provider>
-      ...{
-           (~currentRoute) =>
-             <p>
-               {
-                 (
-                   switch (currentRoute) {
-                   | RouterConfig.Home => "This is home"
-                   | RouterConfig.Hello(n) => "Hi " ++ n
-                   | _ => "404 not found"
-                   }
-                 )
-                 |> React.string
-               }
-             </p>
-         }
-    </Router.Provider>
-  </div>
-```
-
-### Authentication example
-
-Quick and dirty implementation :
-
-```reason
-open ReasonReactNavigation;
-
-module Config = {
-  type route =
-    | Login
-    | Dashboard
-    | NotFound;
-
-  let routeToUrl = route =>
-    switch (route) {
-    | Login => "/login"
-    | Dashboard => "/dashboard"
-    | NotFound => "/404"
-    };
-  let routeFromUrl = (url: ReasonReact.Router.url) =>
-    switch (url.path) {
-    | ["login"] => Login
-    | ["dashboard"] => Dashboard
-    | _ => NotFound
-    };
-};
-
-module Router = CreateRouter(Config);
-
-[@react.component]
-let make = () => {
-  let (currentUser, setCurrentUser) = React.useState(() => None);
-
-  <Router.Provider>
-    {
-      (~currentRoute) =>
-        switch (currentRoute, currentUser) {
-        | (Config.Login, None) => <Login />
-        | (Config.Login, Some(_)) => <Redirect to_=Config.Dashboard />
-        | (route, Some(user)) =>
-          switch (route) {
-          | Config.Dashboard => <Dashboard user />
-          | _ => <NotFound />
-          }
-        | (Config.NotFound, _) => <NotFound />
-        | (_, None) => <Redirect to_=Login />
-        }
     }
-  </Router.Provider>
-};
+}
+
+module Router = CreateRouter(RouterConfig)
+
+module CustomLink = {
+  @react.component
+  let make = (~route: RouterConfig.t, ~children) => {
+    <Router.Link
+      className="rounded block px-3 py-2 bg-gray-200 mr-2 hover:bg-gray-300"
+      activeClassName="bg-blue-500 text-white hover:bg-blue-600"
+      route>
+      children
+    </Router.Link>
+  }
+}
+
+module App = {
+  @react.component
+  let make = () =>
+    <Router.Provider>
+      {(~currentRoute) => <>
+        <div className="container mx-auto p-4">
+          <h1 className="text-xl font-semibold text-center mb-4 text-blue-700">
+            {"RescriptRouter example"->React.string}
+          </h1>
+          <div className="flex flex-row items-center mb-4">
+            <CustomLink route=RouterConfig.Home> {"Home"->React.string} </CustomLink>
+            <CustomLink route=RouterConfig.About> {"About"->React.string} </CustomLink>
+            <CustomLink route={RouterConfig.Hello("dck")}>
+              {"Route with params"->React.string}
+            </CustomLink>
+          </div>
+          {switch currentRoute {
+          | RouterConfig.Home => <h1> {"Home"->React.string} </h1>
+          | RouterConfig.About => <h1> {"About"->React.string} </h1>
+          | RouterConfig.Hello(name) =>
+            <div>
+              <h1> {"Route with params"->React.string} </h1>
+              <p> {("Hi : " ++ name)->React.string} </p>
+            </div>
+          | _ => <h1> {"404 not found"->React.string} </h1>
+          }}
+        </div>
+      </>}
+    </Router.Provider>
+}
+
 ```
 
 ## Run demo
@@ -221,7 +196,7 @@ Install dependencies
 yarn
 ```
 
-Run bsb watcher
+Compiles ReScript files
 
 ```
 yarn start
