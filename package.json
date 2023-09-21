@@ -1,6 +1,6 @@
 {
   "name": "@dck/rescript-router",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": "false",
   "scripts": {
     "build": "rescript build -with-deps",
