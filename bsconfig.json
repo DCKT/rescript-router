@@ -1,7 +1,7 @@
 {
   "name": "@dck/reason-react-navigation",
-  "reason": {
-    "react-jsx": 3
+  "jsx": {
+    "version": 4
   },
   "sources": [
     {
@@ -9,7 +9,8 @@
       "subdirs": true
     },
     {
-      "dir": "examples"
+      "dir": "examples",
+      "type": "dev"
     }
   ],
   "package-specs": [
@@ -20,6 +21,11 @@
   ],
   "suffix": ".bs.js",
   "namespace": false,
-  "bs-dependencies": ["reason-react"],
-  "refmt": 3
+  "bs-dependencies": ["@rescript/react", "rescript-classnames"],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header",
+    "-open Belt",
+    "-open Cx"
+  ]
 }
