@@ -1,6 +1,7 @@
 {
   "name": "@dck/rescript-router",
-  "version": "1.3.3",
+  "version": "0.0.0",
+  "private": "false",
   "scripts": {
     "build": "rescript build -with-deps",
     "start": "rescript build -with-deps -w",
@@ -11,10 +12,10 @@
     "write-netlify-redirect": "echo '/*    /index.html   200' > build/_redirects"
   },
   "keywords": [
-    "ReasonML",
+    "ReScript",
     "React",
-    "reason-react",
-    "reason-react-router",
+    "rescript-react",
+    "rescript-react-router",
     "router",
     "routing"
   ],
