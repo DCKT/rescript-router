@@ -1,6 +1,6 @@
 {
   "name": "@dck/rescript-router",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "scripts": {
     "build": "rescript build -with-deps",
     "start": "rescript build -with-deps -w",
