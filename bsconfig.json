@@ -1,5 +1,5 @@
 {
-  "name": "@dck/reason-react-navigation",
+  "name": "@dck/rescript-router",
   "jsx": {
     "version": 4
   },
