@@ -21,6 +21,7 @@
   ],
   "suffix": ".bs.js",
   "namespace": false,
+  "uncurried": true,
   "bs-dependencies": ["@rescript/react", "rescript-classnames"],
   "bsc-flags": [
     "-bs-super-errors",

@@ -2,8 +2,8 @@
   "name": "@dck/rescript-router",
   "version": "1.0.0",
   "scripts": {
-    "build": "rescript build -with-deps",
-    "start": "rescript build -with-deps -w",
+    "build": "rescript build",
+    "start": "rescript build -w",
     "clean": "rescript clean",
     "test": "npm run build",
     "demo": "webpack-dev-server",
@@ -22,19 +22,19 @@
   "author": "Thomas Deconinck",
   "license": "MIT",
   "peerDependencies": {
-    "@rescript/react": "^0.11.0",
+    "@rescript/react": "^0.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rescript": "^10.1.4",
-    "rescript-classnames": "^6.0.0"
+    "rescript": "^11.0.0",
+    "rescript-classnames": "^7.0.0"
   },
   "devDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@rescript/react": "^0.11.0",
+    "@rescript/react": "^0.12.1",
     "html-webpack-plugin": "3.2.0",
-    "rescript": "^10.1.4",
-    "rescript-classnames": "^6.0.0",
+    "rescript": "^11.1.0",
+    "rescript-classnames": "^7.0.0",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"
