@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/DCKT/rescript-router/compare/v1.0.0...v1.1.0) (2024-05-21)
+
+
+### Features
+
+* upgrade to rescript 11 ([5698a0e](https://github.com/DCKT/rescript-router/commit/5698a0e4dd1b6c620317e5dc96e69f92d4c9818a))
+
 # 1.0.0 (2023-12-23)
 
 
